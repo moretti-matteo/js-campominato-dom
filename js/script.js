@@ -24,9 +24,9 @@ function randomNumber(min, max) {
 //verifico se quel numero sia compreso tra 1 e 100.
 //verifico se quel numero sia un numero già inserito precedentemente
 function inserimentoNumero() {
-
+    let numeroInserito = 0;
     do {
-        numeroInserito = Number(prompt("Inserisci un numero tra 1 e 100"));
+        numeroInserito = Number(prompt(`Inserisci un numero tra 1 e 100`));
 
         if (isNaN(numeroInserito)) {
             alert("Puoi inserire solo numeri, Riprova");
@@ -38,6 +38,8 @@ function inserimentoNumero() {
 
     } while (isNaN(numeroInserito) || rangeNumCheck(numeroInserito) || numeriInseriti.includes(numeroInserito));
 
+    return numeroInserito;
+
     //controllo se il num inserito sia compreso tra 1 e 100
     function rangeNumCheck(num) {
         return num < 1 || num > 100 ? true : false;
@@ -48,11 +50,49 @@ function verificaSconfitta(num) {
     return mine.includes(num) ? true : false;
 }
 
+function verificaDifficolta(difficolta) {
+    let verificaRange = difficolta < 0 || difficolta > 2 ? false : true;
+    let verificaNaN = isNaN(difficolta) ? false : true;
+
+    if (!verificaRange) {
+        alert("Puoi inserire solo valori compresi tra 0 e 2");
+    } else if (!verificaNaN) {
+        alert("Puoi inserire solo valori numerici");
+    }
+    return (verificaRange && verificaNaN);
+}
+
+function cambioDifficolta(difficolta) {
+    switch (difficolta) {
+        case 0:
+            return 100;
+        case 1:
+            return 80;
+        case 2:
+            return 50;
+    }
+}
+
+let difficolta = undefined;
 const mine = [];
-let numMine = 16;
 const numeriInseriti = [];
 let numeroInserito = 0;
+let numMine = 16;
+let numTotali = 0;
 let score = 0;
+let i = 0;
+
+
+do {
+    difficolta = Number(prompt(`
+    Inserisci difficoltà:
+    difficoltà 0 => tra 1 e 100
+    difficoltà 1 => tra 1 e 80
+    difficoltà 2 => tra 1 e 50`));
+
+    numTotali = cambioDifficolta(difficolta);
+
+} while (!verificaDifficolta(difficolta));
 
 while (mine.length < numMine) {
     random = randomNumber(1, 100);
@@ -63,18 +103,21 @@ while (mine.length < numMine) {
 
 console.log("Array numeri casuali = " + mine);
 
-for (let i = 0; i < (100 - numMine); i++) {
 
-    inserimentoNumero();
+while ((i < numTotali - numMine) && (!verificaSconfitta(numeroInserito))) {
+    numeroInserito = inserimentoNumero();
 
     if (verificaSconfitta(numeroInserito)) {
-        alert(`hai perso!, Punteggio: ${score}`);
-        break;
+        alert(`hai perso!, Punteggio: ${score}/${numTotali - numMine}`);
+
     } else {
+        numeriInseriti.push(numeroInserito);
+        console.log(`Array numeri inseriti: ${numeriInseriti}`);
         score++;
+        if (score === numTotali - numMine) {
+            alert(`hai vinto! Punteggio = ${score}/${numTotali - numMine}`);
+        }
     }
 
-    numeriInseriti.push(numeroInserito);
-    console.log(`Array numeri inseriti: ${numeriInseriti}`);
+    i++;
 }
-
