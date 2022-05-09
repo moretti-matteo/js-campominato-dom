@@ -10,14 +10,49 @@
 // con difficoltà 0 => tra 1 e 100
 // con difficoltà 1 => tra 1 e 80
 // con difficoltà 2 => tra 1 e 50
+//--------------------------------------------------------
 
+
+//Genero un numero casuale tra un MIN e un MAX
 function randomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + 1;
 }
 
 
+//Chiedo all'utente di inserire un numero.
+//verifico che sia effettivamente un numero.
+//verifico se quel numero sia compreso tra 1 e 100.
+//verifico se quel numero sia un numero già inserito precedentemente
+function inserimentoNumero() {
+
+    do {
+        numeroInserito = Number(prompt("Inserisci un numero tra 1 e 100"));
+
+        if (isNaN(numeroInserito)) {
+            alert("Puoi inserire solo numeri, Riprova");
+        } else if (rangeNumCheck(numeroInserito)) {
+            alert("Puoi inserire solo numeri compresi tra 1 e 100, Riprova");
+        } else if (numeriInseriti.includes(numeroInserito)) {
+            alert(`Hai già inserito il numero: ${numeroInserito}, Riprova`);
+        }
+
+    } while (isNaN(numeroInserito) || rangeNumCheck(numeroInserito) || numeriInseriti.includes(numeroInserito));
+
+    //controllo se il num inserito sia compreso tra 1 e 100
+    function rangeNumCheck(num) {
+        return num < 1 || num > 100 ? true : false;
+    }
+}
+
+function verificaSconfitta(num) {
+    return mine.includes(num) ? true : false;
+}
+
 const mine = [];
 let numMine = 16;
+const numeriInseriti = [];
+let numeroInserito = 0;
+let score = 0;
 
 while (mine.length < numMine) {
     random = randomNumber(1, 100);
@@ -28,30 +63,18 @@ while (mine.length < numMine) {
 
 console.log("Array numeri casuali = " + mine);
 
-const numeriInseriti = [];
-let numeroInserito = 0;
-
 for (let i = 0; i < (100 - numMine); i++) {
-    do {
-        numeroInserito = Number(prompt("Inserisci un numero tra 1 e 100"));
-        if (isNaN(numeroInserito)) {
-            alert("Puoi inserire solo numeri, Riprova");
-        } else if (numeroInserito < 1 || numeroInserito > 100) {
-            alert("Puoi inserire solo numeri compresi tra 1 e 100");
-        } else if (numeriInseriti.includes(numeroInserito)) {
-            alert(`Hai già inserito il numero: ${numeroInserito}`);
-        }
 
-    } while (isNaN(numeroInserito) || numeroInserito < 1 || numeroInserito > 100 || numeriInseriti.includes(numeroInserito));
+    inserimentoNumero();
 
-    if (mine.includes(numeroInserito)) {
-        alert("Hai perso");
+    if (verificaSconfitta(numeroInserito)) {
+        alert(`hai perso!, Punteggio: ${score}`);
         break;
+    } else {
+        score++;
     }
-    
+
     numeriInseriti.push(numeroInserito);
     console.log(`Array numeri inseriti: ${numeriInseriti}`);
-
-
 }
 
