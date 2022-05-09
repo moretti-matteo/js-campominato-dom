@@ -10,3 +10,48 @@
 // con difficoltà 0 => tra 1 e 100
 // con difficoltà 1 => tra 1 e 80
 // con difficoltà 2 => tra 1 e 50
+
+function randomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + 1;
+}
+
+
+const mine = [];
+let numMine = 16;
+
+while (mine.length < numMine) {
+    random = randomNumber(1, 100);
+    if (!mine.includes(random)) {
+        mine.push(random);
+    }
+}
+
+console.log("Array numeri casuali = " + mine);
+
+const numeriInseriti = [];
+let numeroInserito = 0;
+
+for (let i = 0; i < (100 - numMine); i++) {
+    do {
+        numeroInserito = Number(prompt("Inserisci un numero tra 1 e 100"));
+        if (isNaN(numeroInserito)) {
+            alert("Puoi inserire solo numeri, Riprova");
+        } else if (numeroInserito < 1 || numeroInserito > 100) {
+            alert("Puoi inserire solo numeri compresi tra 1 e 100");
+        } else if (numeriInseriti.includes(numeroInserito)) {
+            alert(`Hai già inserito il numero: ${numeroInserito}`);
+        }
+
+    } while (isNaN(numeroInserito) || numeroInserito < 1 || numeroInserito > 100 || numeriInseriti.includes(numeroInserito));
+
+    if (mine.includes(numeroInserito)) {
+        alert("Hai perso");
+        break;
+    }
+    
+    numeriInseriti.push(numeroInserito);
+    console.log(`Array numeri inseriti: ${numeriInseriti}`);
+
+
+}
+
